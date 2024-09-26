@@ -4,12 +4,14 @@
   "description": "Sort all photos in a folder by running a command!",
   "main": "index.js",
   "scripts": {
-    "sort": "node index.js"
+    "sort": "node index.js && node count.js"
   },
   "author": "Truman Chan",
   "license": "ISC",
   "dependencies": {
     "exif": "^0.6.0",
+    "ffprobe": "^1.1.2",
+    "ffprobe-static": "^3.1.0",
     "node": "^22.9.0"
   }
 }
