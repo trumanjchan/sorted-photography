@@ -9,6 +9,7 @@
   "author": "Truman Chan",
   "license": "ISC",
   "dependencies": {
+    "exif": "^0.6.0",
     "node": "^22.9.0"
   }
 }
