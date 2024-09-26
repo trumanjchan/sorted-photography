@@ -3,8 +3,9 @@ const folderPath = './Photos/';
 const files = fs.readdirSync(folderPath);
 var ExifImage = require('exif').ExifImage;
 
-//console.log(files);
-console.log(files.length);
+console.log("Start: " + files.length);
+
+const templetter = ["a", "b", "c", "d"];  //needs work
 
 for (let i = 0; i < files.length; i++) {
     try {
@@ -13,13 +14,21 @@ for (let i = 0; i < files.length; i++) {
                 return;
             else
                 console.log(exifData.exif.DateTimeOriginal);
-                let date = exifData.exif.DateTimeOriginal.substring(0, 10).replaceAll(":", "");
-                let time = exifData.exif.DateTimeOriginal.substring(11, 16).replaceAll(":", "");
+                var date = exifData.exif.DateTimeOriginal.substring(0, 10).replaceAll(":", "");
+                var time = exifData.exif.DateTimeOriginal.substring(11, 16).replaceAll(":", "");
                 date = date.substring(4, 10) + date.substring(0, 4);
-                console.log(date)
-                console.log(time)
 
-                fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '.JPG');
+                if (fs.existsSync(folderPath + date + '_' + time + '.JPG')) {  //needs work
+                    fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + templetter[0] + '.JPG');
+                } else if (fs.existsSync(folderPath + date + '_' + time + templetter[0] + '.JPG')) {
+                    fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + templetter[1] + '.JPG');
+                } else if (fs.existsSync(folderPath + date + '_' + time + templetter[1] + '.JPG')) {
+                    fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + templetter[2] + '.JPG');
+                } else if (fs.existsSync(folderPath + date + '_' + time + templetter[2] + '.JPG')) {
+                    fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + templetter[3] + '.JPG');
+                } else {
+                    fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '.JPG');
+                }
         });
     } catch (error) {
         console.log('Error: ' + error.message);
