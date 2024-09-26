@@ -1,0 +1,14 @@
+{
+  "name": "sorted-photography",
+  "version": "1.0.0",
+  "description": "Sort all photos in a folder by running a command!",
+  "main": "index.js",
+  "scripts": {
+    "sort": "node index.js"
+  },
+  "author": "Truman Chan",
+  "license": "ISC",
+  "dependencies": {
+    "node": "^22.9.0"
+  }
+}
