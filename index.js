@@ -3,7 +3,7 @@ const folderPath = './Photos/';
 const files = fs.readdirSync(folderPath);
 
 var ExifImage = require('exif').ExifImage;
-var ffprobe = require('ffprobe'), ffprobeStatic = require('ffprobe-static');
+var ffprobe = require('ffprobe'), ffprobeStatic = require('ffprobe-static'), moment = require('moment-timezone');
 
 console.log(files.length);
 
@@ -30,10 +30,13 @@ for (let i = 0; i < files.length; i++) {
         ffprobe(folderPath + files[i], { path: ffprobeStatic.path }, function (err, info) {
             if (err) return err;
 
-            var videoData = info.streams[1].tags.creation_time;
-            var date = videoData.substring(0, 10).replaceAll("-", "");
-            var time = videoData.substring(11, 16).replaceAll(":", "");
+            var videoData = moment(info.streams[1].tags.creation_time.substring(0, 19) + info.streams[1].tags.creation_time.at(-1));
+            videoData.tz('America/Los_Angeles').format('ha z');
+
+            var date = videoData.format().substring(0, 10).replaceAll("-", "");
             date = date.substring(4, 10) + date.substring(0, 4);
+
+            var time = videoData.format().substring(11, 16).replaceAll(":", "");
 
             let originalName = files[i];
             let extensionName = originalName.slice(originalName.lastIndexOf('.'));
