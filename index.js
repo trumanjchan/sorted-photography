@@ -19,7 +19,7 @@ for (let i = 0; i < files.length; i++) {
                 date = date.substring(4, 10) + date.substring(0, 4);
 
                 let originalName = files[i];
-                let extensionName = originalName.slice(originalName.lastIndexOf('.') - 1);
+                let extensionName = originalName.slice(originalName.lastIndexOf('.'));
                 originalName = originalName.replace(/\.jpe?g/i, "");
 
                 console.log(date + '_' + time + '_' + originalName + '_' + exifData.image.Make + exifData.image.Model + extensionName)
@@ -36,7 +36,7 @@ for (let i = 0; i < files.length; i++) {
             date = date.substring(4, 10) + date.substring(0, 4);
 
             let originalName = files[i];
-            let extensionName = originalName.slice(originalName.lastIndexOf('.') - 1);
+            let extensionName = originalName.slice(originalName.lastIndexOf('.'));
             originalName = originalName.replace(/\.mov$/i, "");
 
             console.log(date + '_' + time + '_' + originalName + extensionName);
