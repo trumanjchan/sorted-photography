@@ -1,51 +1,54 @@
-const fs = require('node:fs');
+import fs from 'node:fs';
 const folderPath = './Photos/';
 const files = fs.readdirSync(folderPath);
 
-var ExifImage = require('exif').ExifImage;
-var ffprobe = require('ffprobe'), ffprobeStatic = require('ffprobe-static'), moment = require('moment-timezone');
+import { input } from '@inquirer/prompts';
+import mediafileMetadata from "mediafile-metadata";
+import moment from 'moment-timezone';
 
-console.log(files.length);
 
-for (let i = 0; i < files.length; i++) {
-    try {
-        // Change image file names
-        new ExifImage({ image : folderPath + files[i] }, function (error, exifData) {
-            if (error)
-                return;
-            else
-                var date = exifData.exif.DateTimeOriginal.substring(0, 10).replaceAll(":", "");
-                var time = exifData.exif.DateTimeOriginal.substring(11, 16).replaceAll(":", "");
-                date = date.substring(4, 10) + date.substring(0, 4);
+const timezonelist = ["", "America/Los_Angeles", "America/New_York", "Asia/Tokyo", "Australia/Sydney"];
 
-                let originalName = files[i];
-                let extensionName = originalName.slice(originalName.lastIndexOf('.'));
-                originalName = originalName.replace(/\.jpe?g/i, "");
+const answer = await input({ message: 'List of Timezones:\n(0) Local\n(1) PST\n(2) EDT\n(3) JST\n(4) EST\nConvert to:' });
 
-                console.log(date + '_' + time + '_' + originalName + '_' + exifData.image.Make + exifData.image.Model + extensionName)
-                fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '_' + originalName + '_' + exifData.image.Make + exifData.image.Model + extensionName);
-        });
-        
-        // Change video file names
-        ffprobe(folderPath + files[i], { path: ffprobeStatic.path }, function (err, info) {
-            if (err) return err;
-
-            var videoData = moment(info.streams[1].tags.creation_time.substring(0, 19) + info.streams[1].tags.creation_time.at(-1));
-            videoData.tz('America/Los_Angeles').format('ha z');
-
-            var date = videoData.format().substring(0, 10).replaceAll("-", "");
-            date = date.substring(4, 10) + date.substring(0, 4);
-
-            var time = videoData.format().substring(11, 16).replaceAll(":", "");
-
-            let originalName = files[i];
-            let extensionName = originalName.slice(originalName.lastIndexOf('.'));
-            originalName = originalName.replace(/\.mov$/i, "");
-
-            console.log(date + '_' + time + '_' + originalName + extensionName);
-            fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '_' + originalName + extensionName);
-        });
-    } catch (error) {
-        console.log('Error: ' + error.message);
+if (answer == 0) {
+    console.log(moment().local().format());
+} else if (timezonelist[answer]) {
+    var tzthere = moment().tz(timezonelist[answer]).utcOffset();
+    
+    if (files[0] == '.DS_Store') {
+        files.splice(0,1);
     }
+    
+    console.log(files.length);
+    
+    for (let i = 0; i < files.length; i++) {
+        const essentials = await mediafileMetadata.getEssentials(folderPath + files[i]);
+        console.log(essentials);
+        
+        let tzhere = moment().utcOffset();
+        //let tzthere = moment().tz('Asia/Tokyo').utcOffset()
+        let utc_offset_diff = -(tzhere - tzthere);  //-960
+        
+        let local_time = moment(essentials.creationDate).format();
+        let converted_time = moment(essentials.creationDate).utcOffset(utc_offset_diff).format();
+        
+        console.log(local_time);
+        console.log(converted_time);
+
+        let date = converted_time.substring(0, 10).replaceAll("-", "");
+        date = date.substring(4, 10) + date.substring(0, 4);
+        console.log(date);
+
+        let time = converted_time.substring(11, 16).replaceAll(":", "");
+        console.log(time);
+
+        let original_name = files[i];
+
+        console.log(date + '_' + time + '_' + original_name);
+        fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '_' + original_name);
+    }
+    console.log(files.length);
+} else {
+    console.log("\nPlease choose a valid option.\n");
 }
