@@ -7,34 +7,47 @@ import mediafileMetadata from "mediafile-metadata";
 import moment from 'moment-timezone';
 
 
-const timezonelist = ["", "America/Los_Angeles", "America/New_York", "Asia/Tokyo", "Australia/Sydney"];
+const timezonelist = ["America/Los_Angeles", "America/New_York", "Asia/Tokyo"];
 
-const answer = await input({ message: 'List of Timezones:\n(0) Local\n(1) PST\n(2) EDT\n(3) JST\n(4) EST\nConvert to:' });
+const answer1 = await input({ message: '\n(0) Don\'t care what timezone the pictures were taken in - Convert to Local Timezone\n(1) Photos taken in Local Timezone --CONVERT--> X Timezone\n(2) Photos taken in correct Timezone --CONVERT--> X Timezone\nOption:' });  //don't care about timezone vs my dslr pics vs my phone pics
+var answer2;
+if (answer1 == 0) {
+    answer2 = null;
+} else {
+    answer2 = await input({ message: 'List of Timezones:\n(0) PST\n(1) EDT\n(2) JST\nConvert to:' });
+}
 
-if (answer == 0) {
-    console.log(moment().local().format());
-} else if (timezonelist[answer]) {
-    var tzthere = moment().tz(timezonelist[answer]).utcOffset();
-    
-    if (files[0] == '.DS_Store') {
-        files.splice(0,1);
-    }
-    
-    console.log(files.length);
-    
+if (files[0] == '.DS_Store') {
+    files.splice(0,1);
+}
+console.log(files.length);
+if (answer1 == 0 && answer2 == null) {
     for (let i = 0; i < files.length; i++) {
         const essentials = await mediafileMetadata.getEssentials(folderPath + files[i]);
-        console.log(essentials);
-        
-        let tzhere = moment().utcOffset();
-        //let tzthere = moment().tz('Asia/Tokyo').utcOffset()
-        let utc_offset_diff = -(tzhere - tzthere);  //-960
+        console.log(essentials);  //creationDate is always in UTC, as denoted by the 'Z'.
+        console.log(moment(essentials.creationDate).local().format());
+    }
+} else if ((answer1 == 1 || answer1 == 2) && timezonelist[answer2]) {
+    for (let i = 0; i < files.length; i++) {
+        const essentials = await mediafileMetadata.getEssentials(folderPath + files[i]);
+        console.log(essentials);  //creationDate is always in UTC, as denoted by the 'Z'.
         
         let local_time = moment(essentials.creationDate).format();
-        let converted_time = moment(essentials.creationDate).utcOffset(utc_offset_diff).format();
+        var converted_time;
+        if (answer1 == 1) {
+            let tzhere = moment().utcOffset();
+            //let tzthere = moment().tz('Asia/Tokyo').utcOffset()
+            let tzthere = moment().tz(timezonelist[answer2]).utcOffset();
+            let utc_offset_diff = -(tzhere - tzthere);  //-960
+            //my dslr was set in my local timezone. Change creationDate from UTC to JST using utcOffset between local timezone and JST.
+            converted_time = moment(essentials.creationDate).utcOffset(utc_offset_diff).format();
+        } else if (answer1 == 2) {
+            //my phone was in the timezone. Change creationDate from UTC to JST.
+            converted_time = moment(essentials.creationDate).utc().tz(timezonelist[answer2]).format();
+        }
         
-        console.log(local_time);
-        console.log(converted_time);
+        console.log(local_time + "   Local Timezone");
+        console.log(converted_time + "   Converted Timezone");
 
         let date = converted_time.substring(0, 10).replaceAll("-", "");
         date = date.substring(4, 10) + date.substring(0, 4);
@@ -48,7 +61,7 @@ if (answer == 0) {
         console.log(date + '_' + time + '_' + original_name);
         fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '_' + original_name);
     }
-    console.log(files.length);
 } else {
-    console.log("\nPlease choose a valid option.\n");
+    console.log("\nPlease choose valid options.\n");
 }
+console.log(files.length);
