@@ -25,7 +25,19 @@ if (answer1 == 0 && answer2 == null) {
     for (let i = 0; i < files.length; i++) {
         const essentials = await mediafileMetadata.getEssentials(folderPath + files[i]);
         console.log(essentials);  //creationDate is always in UTC, as denoted by the 'Z'.
-        console.log(moment(essentials.creationDate).local().format());
+        let converted_time = moment(essentials.creationDate).local().format();
+
+        let date = converted_time.substring(0, 10).replaceAll("-", "");
+        date = date.substring(4, 10) + date.substring(0, 4);
+        console.log(date);
+
+        let time = converted_time.substring(11, 16).replaceAll(":", "");
+        console.log(time);
+
+        let original_name = files[i];
+
+        console.log(date + '_' + time + '_' + original_name);
+        fs.renameSync(folderPath + files[i], folderPath + date + '_' + time + '_' + original_name);
     }
 } else if ((answer1 == 1 || answer1 == 2) && timezonelist[answer2]) {
     for (let i = 0; i < files.length; i++) {
