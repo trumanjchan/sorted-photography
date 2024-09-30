@@ -20,11 +20,18 @@ if (answer1 == 0) {
 if (files[0] == '.DS_Store') {
     files.splice(0,1);
 }
-console.log(files.length);
+let startlength = console.log(files.length);
+let undefinedcount = 0;
 if (answer1 == 0 && answer2 == null) {
     for (let i = 0; i < files.length; i++) {
+        console.log(files[i]);
         const essentials = await mediafileMetadata.getEssentials(folderPath + files[i]);
         console.log(essentials);  //creationDate is always in UTC, as denoted by the 'Z'.
+        if (essentials === undefined) {
+            undefinedcount++;
+            continue;
+        }
+
         let converted_time = moment(essentials.creationDate).local().format();
 
         let date = converted_time.substring(0, 10).replaceAll("-", "");
@@ -41,8 +48,13 @@ if (answer1 == 0 && answer2 == null) {
     }
 } else if ((answer1 == 1 || answer1 == 2) && timezonelist[answer2]) {
     for (let i = 0; i < files.length; i++) {
+        console.log(files[i]);
         const essentials = await mediafileMetadata.getEssentials(folderPath + files[i]);
         console.log(essentials);  //creationDate is always in UTC, as denoted by the 'Z'.
+        if (essentials === undefined) {
+            undefinedcount++;
+            continue;
+        }
         
         let local_time = moment(essentials.creationDate).format();
         var converted_time;
@@ -76,4 +88,6 @@ if (answer1 == 0 && answer2 == null) {
 } else {
     console.log("\nPlease choose valid options.\n");
 }
-console.log(files.length);
+let endlength = console.log(files.length);
+console.log("Same # of files before/after: " + (startlength === endlength));
+console.log("Photos not converted as exif data could not be found: " + undefinedcount);
