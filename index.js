@@ -1,5 +1,17 @@
 import fs from 'node:fs';
-const folderPath = './Photos/';
+const rootfiles = fs.readdirSync('./');
+var rootFolder;
+for (let i = 0; i < rootfiles.length; i++) {
+    if (rootfiles[i] == '.git' || rootfiles[i] == 'node_modules') {
+        continue;
+    }
+
+    if (fs.existsSync(rootfiles[i]) && fs.lstatSync(rootfiles[i]).isDirectory()) {
+        rootFolder = rootfiles[i];
+        console.log("Found folder: " + rootfiles[i]);
+    }
+}
+const folderPath = './' + rootFolder + '/';
 const files = fs.readdirSync(folderPath);
 
 import { input } from '@inquirer/prompts';
