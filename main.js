@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
 const rename = require('./rename');
 
 function createWindow() {
@@ -18,7 +19,13 @@ app.whenReady().then(createWindow);
 
 ipcMain.handle('select-folder', async () => {
     const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-    return result.filePaths[0] + "/";
+    let dirPath = result.filePaths[0];
+
+    if (dirPath && !dirPath.endsWith(path.sep)) {
+        dirPath += path.sep;
+    }
+    console.log(dirPath)
+    return dirPath;
 });
 
 ipcMain.handle('rename-files', async (event, folderPath) => {

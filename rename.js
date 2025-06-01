@@ -6,7 +6,7 @@ async function renameFilesInFolder(data) {
     try {
         //console.log(data);
         const files = fs.readdirSync(data.folderPath);
-        const timezonelist = ["America/Los_Angeles", "America/New_York", "Asia/Tokyo"];
+        const timezonelist = ["America/Los_Angeles", "America/New_York", "Asia/Tokyo", "Asia/Shanghai"];
         var answer2;
 
         if (data.answer1 == 0) {
@@ -59,14 +59,14 @@ async function renameFilesInFolder(data) {
 
                 let local_time = moment(essentials.creationDate).format();
                 var converted_time;
-                if (answer1 == 1) {
+                if (data.answer1 == 1) {
                     let tzhere = moment().utcOffset();
                     //let tzthere = moment().tz('Asia/Tokyo').utcOffset()
                     let tzthere = moment().tz(timezonelist[answer2]).utcOffset();
                     let utc_offset_diff = -(tzhere - tzthere);  //-960
                     //my dslr was set in my local timezone. Change creationDate from UTC to JST using utcOffset between local timezone and JST.
                     converted_time = moment(essentials.creationDate).utcOffset(utc_offset_diff).format();
-                } else if (answer1 == 2) {
+                } else if (data.answer1 == 2) {
                     //my phone was in the timezone. Change creationDate from UTC to JST.
                     converted_time = moment(essentials.creationDate).utc().tz(timezonelist[answer2]).format();
                 }
