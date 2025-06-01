@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sorted Photography</title>
+    </head>
+
+    <body>
+        <div>
+            (0) Don't care what timezone the pictures were taken in - Convert to Local Timezone<br>(1) Photos taken in Local Timezone --CONVERT--> X Timezone<br>(2) Photos taken in correct Timezone --CONVERT--> X Timezone
+        </div>
+        <input id="answer1" type="text" />
+        <div>
+            If your answer above is not (0),<br>List of Timezones:<br>(0) PST<br>(1) EDT<br>(2) JST<br>(3) CST<br>Convert to:
+        </div>
+        <input id="answer2" type="text" />
+
+        <div style="margin-top: 20px;">
+            <button id="select-folder">Select Folder</button>
+            <p id="folder-path"></p>
+            <button id="rename-files">Rename Files</button>
+            <p id="status"></p>
+        </div>
+
+        <script src="renderer.js"></script>
+    </body>
+</html>
