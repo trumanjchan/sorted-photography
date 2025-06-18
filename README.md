@@ -12,7 +12,7 @@ After coming back from a trip with many dslr photos, I started backing them up o
 <summary>Windows Guide</summary>
 
 ![Screenshot of Windows First Run](Windows_Warning_Popup_sorted-photography.jpg)
-![Screenshot of Windows Japan Trip Example](Windows_Japan_Trip_Example_sorted-photography.jpg)
+![Screenshot of macOS Japan Trip Example](macOS_Japan_Trip_Example_sorted-photography.png)
 
 </details>
 
@@ -25,9 +25,10 @@ After coming back from a trip with many dslr photos, I started backing them up o
 - MOV
 
 ### Options
-- Don't care what timezone the pictures were taken in - Convert to Local Timezone
-- Photos taken in Local Timezone --CONVERT--> X Timezone (ex: dslr was set to local timezone, and forgot to change when going on vacation)
-- Photos taken in correct Timezone --CONVERT--> X Timezone (ex: phone or dslr auto-detects timezone)
+- Local Timezone &#8594; rename to different Timezone
+  > Phone/DSLR was manually set to your local timezone and you forgot to change it before or during travel. Photos were taken in a different timezone.
+- Correct Timezone &#8594; rename to same Timezone
+  > Phone/DSLR auto-detects timezone. Photos were taken in the correct timezone.
 
 ### Run locally in VS Code
 Requirements: VS Code, node v21.0.0

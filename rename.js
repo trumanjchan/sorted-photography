@@ -12,34 +12,9 @@ async function renameFilesInFolder(data) {
         }
         let startlength = console.log(files.length);
         let undefinedcount = 0;
-
-
-        if (data.answer1 == 0 && !data.answer2) {
-            for (let i = 0; i < files.length; i++) {
-                console.log("");
-                console.log(files[i]);
-                const essentials = await mediafileMetadata.getEssentials(data.folderPath + files[i]);
-                console.log(essentials);  //creationDate is always in UTC, as denoted by the 'Z'.
-                if (essentials === undefined) {
-                    undefinedcount++;
-                }
-
-                let converted_time = moment(essentials.creationDate).local().format();
-
-                let date = converted_time.substring(0, 10).replaceAll("-", "");
-                date = date.substring(4, 10) + date.substring(0, 4);
-                console.log(date);
-
-                let time = converted_time.substring(11, 16).replaceAll(":", "");
-                console.log(time);
-
-                let original_name = files[i];
-
-                console.log(date + '_' + time + '_' + original_name);
-                fs.renameSync(data.folderPath + files[i], data.folderPath + date + '_' + time + '_' + original_name);
-                console.log("");
-            }
-        } else if ((data.answer1 == 1 || data.answer1 == 2) && data.answer2) {
+        
+        
+        if (data.option1 === true || data.option2 === true) {
             for (let i = 0; i < files.length; i++) {
                 console.log("");
                 console.log(files[i]);
@@ -51,16 +26,16 @@ async function renameFilesInFolder(data) {
 
                 let local_time = moment(essentials.creationDate).format();
                 var converted_time;
-                if (data.answer1 == 1) {
+                if (data.option1 === true) {
                     let tzhere = moment().utcOffset();
                     //let tzthere = moment().tz('Asia/Tokyo').utcOffset()
-                    let tzthere = moment().tz(data.answer2).utcOffset();
+                    let tzthere = moment().tz(data.convertTo).utcOffset();
                     let utc_offset_diff = -(tzhere - tzthere);  //-960
                     //my dslr was set in my local timezone. Change creationDate from UTC to JST using utcOffset between local timezone and JST.
                     converted_time = moment(essentials.creationDate).utcOffset(utc_offset_diff).format();
-                } else if (data.answer1 == 2) {
+                } else if (data.option2 === true) {
                     //my phone was in the timezone. Change creationDate from UTC to JST.
-                    converted_time = moment(essentials.creationDate).utc().tz(data.answer2).format();
+                    converted_time = moment(essentials.creationDate).utc().tz(data.convertTo).format();
                 }
 
                 console.log(local_time + "   Local Timezone");

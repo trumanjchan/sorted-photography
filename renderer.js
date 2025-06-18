@@ -9,15 +9,6 @@ document.getElementById('select-folder').addEventListener('click', async () => {
     folderPathElem.textContent = folderPath || 'No folder selected';
 });
 
-document.getElementById('answer1').addEventListener('input', async () => {
-    if (document.getElementById('answer1').value === "1" || document.getElementById('answer1').value === "2") {
-        document.getElementById('hidden').style.display = "block";
-    } else {
-        document.getElementById('hidden').style.display = "none";
-        document.getElementById('status').innerHTML = '';
-    }
-});
-
 document.getElementById('list-timezones').addEventListener('click', async () => {
     const country = document.getElementById('country').value;
     const zonesList = document.getElementById('timezones');
@@ -39,11 +30,22 @@ document.getElementById('rename-files').addEventListener('click', async () => {
         return;
     }
 
-    const answer1 = document.getElementById("answer1").value;
-    const answer2 = document.getElementById("answer2").value;
+    const option1 = document.getElementById("option1").checked;
+    const option2 = document.getElementById("option2").checked;
+    if (!(option1 || option2)) {
+        alert('Please select a renaming method.');
+        return;
+    }
+
+    const convertTo = document.getElementById("convert-to").value;
+    if (!convertTo) {
+        alert('Please provide a valid timezone.');
+        return;
+    }
+
     const statusElem = document.getElementById('status');
 
-    const result = await ipcRenderer.invoke('rename-files', { folderPath, answer1, answer2 });
+    const result = await ipcRenderer.invoke('rename-files', { folderPath, option1, option2, convertTo });
     if (result.success) {
         statusElem.textContent = 'Files renamed successfully!';
     } else {

@@ -1,0 +1,21 @@
+input[type="radio"] {
+    align-self: flex-start;
+}
+input[type="text"] {
+    width: 155px;
+}
+ul {
+    margin: 0;
+    padding-left: 25px;
+}
+
+.option {
+    gap: 5px;
+}
+.flex {
+    display: flex;
+
+    &.column {
+        flex-direction: column;
+    }
+}
