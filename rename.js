@@ -6,14 +6,6 @@ async function renameFilesInFolder(data) {
     try {
         //console.log(data);
         const files = fs.readdirSync(data.folderPath);
-        const timezonelist = ["America/Los_Angeles", "America/New_York", "Asia/Tokyo", "Asia/Shanghai"];
-        var answer2;
-
-        if (data.answer1 == 0) {
-            answer2 = null;
-        } else {
-            answer2 = data.answer2;
-        }
 
         if (files[0] == '.DS_Store') {
             files.splice(0, 1);
@@ -21,8 +13,8 @@ async function renameFilesInFolder(data) {
         let startlength = console.log(files.length);
         let undefinedcount = 0;
 
-        
-        if (data.answer1 == 0 && answer2 == null) {
+
+        if (data.answer1 == 0 && !data.answer2) {
             for (let i = 0; i < files.length; i++) {
                 console.log("");
                 console.log(files[i]);
@@ -47,7 +39,7 @@ async function renameFilesInFolder(data) {
                 fs.renameSync(data.folderPath + files[i], data.folderPath + date + '_' + time + '_' + original_name);
                 console.log("");
             }
-        } else if ((data.answer1 == 1 || data.answer1 == 2) && timezonelist[answer2]) {
+        } else if ((data.answer1 == 1 || data.answer1 == 2) && data.answer2) {
             for (let i = 0; i < files.length; i++) {
                 console.log("");
                 console.log(files[i]);
@@ -62,13 +54,13 @@ async function renameFilesInFolder(data) {
                 if (data.answer1 == 1) {
                     let tzhere = moment().utcOffset();
                     //let tzthere = moment().tz('Asia/Tokyo').utcOffset()
-                    let tzthere = moment().tz(timezonelist[answer2]).utcOffset();
+                    let tzthere = moment().tz(data.answer2).utcOffset();
                     let utc_offset_diff = -(tzhere - tzthere);  //-960
                     //my dslr was set in my local timezone. Change creationDate from UTC to JST using utcOffset between local timezone and JST.
                     converted_time = moment(essentials.creationDate).utcOffset(utc_offset_diff).format();
                 } else if (data.answer1 == 2) {
                     //my phone was in the timezone. Change creationDate from UTC to JST.
-                    converted_time = moment(essentials.creationDate).utc().tz(timezonelist[answer2]).format();
+                    converted_time = moment(essentials.creationDate).utc().tz(data.answer2).format();
                 }
 
                 console.log(local_time + "   Local Timezone");

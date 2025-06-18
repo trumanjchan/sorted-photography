@@ -5,20 +5,27 @@
     </head>
 
     <body>
-        <div>
-            (0) Don't care what timezone the pictures were taken in - Convert to Local Timezone<br>(1) Photos taken in Local Timezone --CONVERT--> X Timezone<br>(2) Photos taken in correct Timezone --CONVERT--> X Timezone
-        </div>
-        <input id="answer1" type="text" />
-        <div>
-            If your answer above is not (0),<br>List of Timezones:<br>(0) PST<br>(1) EDT<br>(2) JST<br>(3) CST<br>Convert to:
-        </div>
-        <input id="answer2" type="text" />
-
-        <div style="margin-top: 20px;">
+        <div style="padding-bottom: 20px; margin-bottom: 10px; border-bottom: 1px solid gray;">
             <button id="select-folder">Select Folder</button>
-            <p id="folder-path"></p>
+            <div id="folder-path"></div>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+            <div>0) Don't care what timezone the pictures were taken in - Convert to Local Timezone<br>1) Photos taken in Local Timezone --CONVERT--> X Timezone<br>2) Photos taken in correct Timezone --CONVERT--> X Timezone</div>
+            <input id="answer1" type="text" />
+        </div>
+
+        <div id="hidden" style="display: none;">
+            <div>If you don't know the timezone,</div>
+            <input id="country" type="text" placeholder="Country (e.g., US, JP, CN)" style="width: 155px;" />
+            <button id="list-timezones">List all timezones</button>
+            <p id="timezones"></p>
+            <input id="answer2" type="text" placeholder="Timezone to convert to" />
+        </div>
+
+        <div style="padding-top: 20px; margin-top: 10px; border-top: 1px solid gray; display: flex;">
             <button id="rename-files">Rename Files</button>
-            <p id="status"></p>
+            <div id="status" style="margin-left: 10px;"></div>
         </div>
 
         <script src="renderer.js"></script>
