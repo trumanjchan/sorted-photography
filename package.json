@@ -1,6 +1,6 @@
 {
   "name": "sorted-photography",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Rename all pics/vids in a folder after your travel trip!",
   "main": "main.js",
   "scripts": {

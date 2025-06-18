@@ -3,7 +3,7 @@ After coming back from a trip with many dslr photos, I started backing them up o
 
 
 ## Run as a desktop app (Windows and MacOS users)
-[Releases v1.0.0](https://github.com/trumanjchan/sorted-photography/releases/tag/v1.0.0)
+[Releases](https://github.com/trumanjchan/sorted-photography/releases)
 
 > Certificates to sign distributables are expensive yearly subscriptions. Since I did not buy any certificates to sign my windows and macos distributables, the easiest way to try out Sorted Photography would be on a Windows pc and downloading then running the exe file.
 
